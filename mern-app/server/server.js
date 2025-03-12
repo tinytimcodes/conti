@@ -24,6 +24,7 @@ const connectDB = async () => {
 };
 
 connectDB();
+
 // Middleware
 app.use(express.json());
 app.use(cors());
