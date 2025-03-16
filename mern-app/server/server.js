@@ -21,10 +21,9 @@ const connectDB = async () => {
         console.error("❌ MongoDB Connection Error:", err);
         process.exit(1); // Exit process with failure
     }
-};
+};  
 
 connectDB();
-
 // Middleware
 app.use(express.json());
 app.use(cors());
