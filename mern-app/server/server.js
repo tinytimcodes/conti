@@ -23,10 +23,16 @@ const connectDB = async () => {
     }
 };  
 
+const corsOptions = {
+    origin: "http://localhost:5173", // make this shit allow reqs from front end 
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true
+}
+
 connectDB();
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use("/api/users", userRoutes)
 
 // Test Route
