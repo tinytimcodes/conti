@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
 });
 
 // Create a new user
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const newUser = new User({ name, email, password });
@@ -25,6 +25,21 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.post("/login", (req, res) => {
+    const {name, email, password} = req.body;
+    User.findOne({user: user})
+    .then(user => {
+        if(user) {
+            if(user.password === password) {
+                res.json("successful login")
+            } else {
+                res.json("incorrect password")
+            }
+        } else {
+            res.json("No record existed")
+        }
+    })
+})
 
 
 module.exports = router;
