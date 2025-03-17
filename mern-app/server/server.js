@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes")
 
 
-dotenv.config(); // Load environment variables
+dotenv.config(); // load env variables here
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -19,7 +19,7 @@ const connectDB = async () => {
         console.log("✅ MongoDB Connected Successfully");
     } catch (err) {
         console.error("❌ MongoDB Connection Error:", err);
-        process.exit(1); // Exit process with failure
+        process.exit(1); // exits if it doesn't work
     }
 };  
 
@@ -30,12 +30,12 @@ const corsOptions = {
 }
 
 connectDB();
-// Middleware
+// gathers routes and middleware
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use("/api/users", userRoutes)
 
-// Test Route
+// testing route
 app.get("/", (req, res) => {
     res.send("Server is running...");
 });

@@ -3,7 +3,7 @@ const User = require("../models/User");
 
 const router = express.Router();
 
-// Get all users
+// returns all users
 router.get("/", async (req, res) => {
     try {
         const users = await User.find();
@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-// Create a new user
+// creates new user in /register
 router.post("/register", async (req, res) => {
     try {
         console.log("Incoming Request Body:", req.body);
@@ -30,20 +30,29 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.post("/login", (req, res) => {
-    const {name, email, password} = req.body;
-    User.findOne({user: user})
-    .then(user => {
-        if(user) {
-            if(user.password === password) {
-                res.json("successful login")
-            } else {
-                res.json("incorrect password")
-            }
-        } else {
-            res.json("No record existed")
+// used for logging in on /register page
+router.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body; // this req the  fields
+
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password are required" });
         }
-    })
+        const user = await User.findOne({ email });
+        // ngl im just using text to text matching im a bum
+
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
+        if (user.password !== password) {
+            return res.status(400).json({ message: "Incorrect password" });
+        }
+
+        res.status(200).json({ message: "Successful login", user });
+    } catch (err) {
+        console.error("Login error:", err);
+        res.status(500).json({ message: "Server error" });
+    }
 })
 
 
