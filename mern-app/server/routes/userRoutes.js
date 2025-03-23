@@ -42,9 +42,11 @@ router.post("/login", async (req, res) => {
         // ngl im just using text to text matching im a bum
 
         if (!user) {
+            console.log("Can't find this user bruh");
             return res.status(400).json({ message: "User not found" });
         }
         if (user.password !== password) {
+            console.log("Can't find this user's password bruh")
             return res.status(400).json({ message: "Incorrect password" });
         }
 

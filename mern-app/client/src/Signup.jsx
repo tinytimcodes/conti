@@ -2,6 +2,8 @@ import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import './Signup.css';
+import { useNavigate } from 'react-router-dom';
  
 
 function Signup() {
@@ -15,13 +17,31 @@ function Signup() {
         .then(result => console.log(result))
         .catch(err=> console.log(err))
     }
+    const navigate = useNavigate();
+    const handleClick = () => {
+        navigate('/dashboard'); 
+    };
 
     return (
-        <div className="d-flex justify-content-center align-items-center bg-secondary vh-100">
-            <div className = "bg-white p-3 rounded w-25">
-                <h2>Register</h2>
-                <form onSubmit={handleSubmit}>
-                <div className="mb-3">
+        <div className="login-container">
+            <div className="laser-beams">
+                <div className="beam beam-1"></div>
+                <div className="beam beam-2"></div>
+                <div className="beam beam-3"></div>
+                <div className="beam beam-4"></div>
+                <div className="beam beam-5"></div>
+                <div className="beam beam-6"></div>
+                <div className="beam beam-7"></div>
+                <div className="beam beam-8"></div>
+            </div>
+            <div className="brand">
+                <h1>Continder</h1>
+            </div>
+            <div className="login-box">
+                <div className="form-wrapper">
+                    <h2>Sign Up</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="form-group">
                     <label htmlFor="email">
                         <strong>Name</strong>
                     </label>
@@ -59,15 +79,15 @@ function Signup() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                <button type="submit" className="btn btn-success w-100 rounded-0">
-                    Register
+                <button type="submit" onClick={handleClick} className="btn btn-success w-100 rounded-0">
+                    Sign Up
                 </button>
                 </form>
-                <p>Already Have an Account?</p>
-                <Link to='/login' className="btn btn-default w-100 bg-light rounded-0 text-decoration-none">
-                    Login
-                </Link>
+                <div className="signin-link">
+                            Already have an account? <Link to='/login'>Sign In</Link>
+                </div>
             </div>
+        </div>
         </div>
     );
 }
