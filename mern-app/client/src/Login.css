@@ -164,3 +164,13 @@ https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page 
 .sign-in-button:hover {
     background-color: #226040;
 }
+
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+}

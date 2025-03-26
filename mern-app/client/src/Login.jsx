@@ -7,20 +7,23 @@ import { useNavigate } from 'react-router-dom';
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        setError(""); // Clear any previous errors
         axios.post('http://localhost:5001/api/users/login', {email, password})
             .then(result => {
                 console.log(result);
+                navigate('/dashboard'); // Only navigate on successful login
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+                setError("Invalid email or password. Please try again.");
+            });
     }
-
-    const navigate = useNavigate();
-    const handleClick = () => {
-        navigate('/dashboard'); 
-    };
 
     return (
         <div className="login-container">
@@ -40,6 +43,7 @@ function Login() {
             <div className="login-box">
                 <div className="form-wrapper">
                     <h2>Sign In</h2>
+                    {error && <div className="error-message">{error}</div>}
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             <label htmlFor="email"><strong>Email</strong></label>
@@ -63,7 +67,7 @@ function Login() {
                                 required
                             />
                         </div>
-                        <button type="submit" onClick={handleClick} className="sign-in-button"> Sign In </button>
+                        <button type="submit" className="sign-in-button">Sign In</button>
                         <div className="signup-link">
                             Don't have an account? <Link to='/signup'>Sign Up</Link>
                         </div>

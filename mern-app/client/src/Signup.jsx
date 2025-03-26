@@ -7,20 +7,26 @@ import { useNavigate } from 'react-router-dom';
  
 
 function Signup() {
-    const [name, setName] = useState() 
-    const [email, setEmail] = useState() 
-    const [password, setPassword] = useState() 
+    const [name, setName] = useState("") 
+    const [email, setEmail] = useState("") 
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        setError("") // Clear any previous errors
         axios.post('http://localhost:5001/api/users/register', {name, email, password})
-        .then(result => console.log(result))
-        .catch(err=> console.log(err))
+        .then(result => {
+            console.log(result)
+            navigate('/login') // Redirect to login page after successful registration
+        })
+        .catch(err => {
+            console.log(err)
+            setError("Registration failed. Please try again.")
+        })
     }
-    const navigate = useNavigate();
-    const handleClick = () => {
-        navigate('/dashboard'); 
-    };
 
     return (
         <div className="login-container">
@@ -40,55 +46,60 @@ function Signup() {
             <div className="login-box">
                 <div className="form-wrapper">
                     <h2>Sign Up</h2>
+                    {error && <div className="error-message">{error}</div>}
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                    <label htmlFor="email">
-                        <strong>Name</strong>
-                    </label>
-                    <input
-                        type="text"
-                        placeholder="Enter Name"
-                        autoComplete="off"
-                        name="email"
-                        className="form-control rounded-0"
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="email">
-                        <strong>Email</strong>
-                    </label>
-                    <input
-                        type="text"
-                        placeholder="Enter Email"
-                        autoComplete="off"
-                        name="email"
-                        className="form-control rounded-0"
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </div>
-                <div className="mb-3">
-                    <label htmlFor="email">
-                        <strong>Password</strong>
-                    </label>
-                    <input
-                        type="password"
-                        placeholder="Enter Password"
-                        name="password"
-                        className="form-control rounded-0"
-                        onChange={(e) => setPassword(e.target.value)}
-                    />
-                </div>
-                <button type="submit" onClick={handleClick} className="btn btn-success w-100 rounded-0">
-                    Sign Up
-                </button>
-                </form>
-                <div className="signin-link">
-                            Already have an account? <Link to='/login'>Sign In</Link>
+                            <label htmlFor="name">
+                                <strong>Name</strong>
+                            </label>
+                            <input
+                                type="text"
+                                placeholder="Enter Name"
+                                autoComplete="off"
+                                name="name"
+                                className="form-control rounded-0"
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="email">
+                                <strong>Email</strong>
+                            </label>
+                            <input
+                                type="email"
+                                placeholder="Enter Email"
+                                autoComplete="off"
+                                name="email"
+                                className="form-control rounded-0"
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="mb-3">
+                            <label htmlFor="password">
+                                <strong>Password</strong>
+                            </label>
+                            <input
+                                type="password"
+                                placeholder="Enter Password"
+                                name="password"
+                                className="form-control rounded-0"
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <button type="submit" className="btn btn-success w-100 rounded-0">
+                            Sign Up
+                        </button>
+                    </form>
+                    <div className="signin-link">
+                        Already have an account? <Link to='/login'>Sign In</Link>
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
     );
 }
+
 export default Signup;
