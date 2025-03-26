@@ -3,12 +3,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes")
+const ticketmasterRoutes = require("./routes/ticketmasterRoutes")
 
 
-dotenv.config(); // Load environment variables
+dotenv.config(); // load env variables here
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT;
 
 const connectDB = async () => {
     try {
@@ -19,18 +20,24 @@ const connectDB = async () => {
         console.log("✅ MongoDB Connected Successfully");
     } catch (err) {
         console.error("❌ MongoDB Connection Error:", err);
-        process.exit(1); // Exit process with failure
+        process.exit(1); // exits if it doesn't work
     }
-};
+};  
+
+const corsOptions = {
+    origin: "http://localhost:5173", // make this shit allow reqs from front end 
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true
+}
 
 connectDB();
-
-// Middleware
+// gathers routes and middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use("/api/users", userRoutes)
+app.use("/api/ticketmaster", ticketmasterRoutes)
 
-// Test Route
+// testing route
 app.get("/", (req, res) => {
     res.send("Server is running...");
 });
