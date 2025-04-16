@@ -34,27 +34,27 @@ const userSchema = new mongoose.Schema({
     },
     
 }, { 
-    timestamps: true, // Automatically add createdAt and updatedAt fields
-    toJSON: { virtuals: true }, // Include virtuals when converting to JSON
-    toObject: { virtuals: true } // Include virtuals when converting to object
+    timestamps: true, // automatically adds createdAt and updatedAt fields
+    toJSON: { virtuals: true }, // include virtuals when converting to JSON (ngl dont need this)
+    toObject: { virtuals: true } // include virtuals when converting to object ( this too)
 });
 
-// Indexes for better query performance
+// for better query performance? need to test this
 userSchema.index({ email: 1 });
 userSchema.index({ location: 1 });
 userSchema.index({ favoriteGenres: 1 });
 userSchema.index({ favoriteArtists: 1 });
 
-// Pre-save middleware to handle any data transformations
+// honeslty not completely sure if we need this but nice to have
 userSchema.pre('save', function(next) {
-    // Convert email to lowercase before saving
+    // lowercase email before saving
     if (this.isModified('email')) {
         this.email = this.email.toLowerCase();
     }
     next();
 });
 
-// Method to compare password (you'll need to implement this with bcrypt)
+// method to compare password (have to implement this with bcrypt but are we using this?)
 userSchema.methods.comparePassword = async function(candidatePassword) {
     // This will be implemented when we add authentication
     return true; // Placeholder
