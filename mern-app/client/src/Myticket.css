@@ -1,0 +1,105 @@
+.myticket-container {
+  padding: 40px 20px;
+  background-color: #1e1e1e;
+  color: white;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.myticket-container h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+
+.ticket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  justify-items: center;
+}
+
+.ticket-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  width: 260px;
+  color: #000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.ticket-card:hover {
+  transform: scale(1.03);
+}
+
+.ticket-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.ticket-card h3 {
+  margin: 4px 0 6px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #111;
+}
+
+.ticket-card p {
+  margin: 0 0 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.remove-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  font-size: 14px;
+  font-weight: normal;   
+  line-height: 1;         
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+.remove-button:hover {
+  background-color: #c0392b;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.buy-button {
+  background-color: #1cc0ad;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  font-size: 14px;
+  font-weight: normal;        
+  line-height: 1;              
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+
+.buy-button:hover {
+  background-color: #35c0cf;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
