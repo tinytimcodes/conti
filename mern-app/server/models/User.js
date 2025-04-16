@@ -18,6 +18,12 @@ const userSchema = new mongoose.Schema({
         ref: 'Event' // Reference to Event model (you'll need to create this)
     }],
     
+    // User's tickets
+    tickets: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ticket'
+    }],
+    
     // preferences for email notis and other stuff
     preferences: {
         emailNotifications: { type: Boolean, default: true },
@@ -44,6 +50,7 @@ userSchema.index({ email: 1 });
 userSchema.index({ location: 1 });
 userSchema.index({ favoriteGenres: 1 });
 userSchema.index({ favoriteArtists: 1 });
+userSchema.index({ tickets: 1 }); // Add index for tickets
 
 // honeslty not completely sure if we need this but nice to have
 userSchema.pre('save', function(next) {
