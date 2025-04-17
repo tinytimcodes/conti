@@ -5,12 +5,12 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Login from './Login'
 import Dashboard from './Dashboard'
 import Myticket from './Myticket'
-import Sellticket from './Sellticket';
-
+import Sellticket from './Sellticket'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
-    <div>
+    <AuthProvider>
       <BrowserRouter>
         <Routes> 
           <Route path = '/' element = {<Login/>}></Route>  
@@ -22,7 +22,7 @@ function App() {
           <Route path = '/sellticket' element = {<Sellticket/>}></Route>
         </Routes>
       </BrowserRouter>
-    </div>
+    </AuthProvider>
   );
 }
 

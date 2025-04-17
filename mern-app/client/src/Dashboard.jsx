@@ -1,17 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
+import { useAuth } from './context/AuthContext';
 
 function Dashboard() {
   const [concerts, setConcerts] = useState([]);
-
   const [index, setIndex] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [style, setStyle] = useState({});
   const startX = useRef(0);
   const deltaX = useRef(0);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const currentConcert = concerts[index];
 
@@ -19,7 +21,7 @@ function Dashboard() {
     const fetchConcerts = async () => {
       try {
         const page = Math.floor(Math.random() * 5); 
-        const res = await axios.get(`/api/ticketmaster/search?keyword=music&size=200&page=${page}`);
+        const res = await axios.get(`http://localhost:5001/api/ticketmaster/search?keyword=music&size=200&page=${page}`);
 
         const events = res.data._embedded?.events || [];
   
@@ -28,7 +30,8 @@ function Dashboard() {
           artist: event.name.split(' | ')[0],
           date: event.dates?.start?.localDate || "TBA",
           venue: event._embedded?.venues?.[0]?.name || "Unknown Venue",
-          image: event.images?.find(img => img.width >= 600)?.url || ""
+          image: event.images?.find(img => img.width >= 600)?.url || "",
+          eventData: event // Store the full event data
         }));
         
         const uniqueByArtist = Array.from(
@@ -37,13 +40,45 @@ function Dashboard() {
         setConcerts(uniqueByArtist);
         
       } catch (error) {
-        console.error("load concert data wrong：", error.message);
+        console.error("Error loading concert data:", error.message);
       }
     };
   
     fetchConcerts();
   }, []);
-  
+
+  const addToMyTickets = async (concert) => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await axios.post(`http://localhost:5001/api/users/${user._id}/tickets`, {
+        ticketData: {
+          event: concert.eventData,
+          ticketmasterId: concert.id,
+          type: "General Admission",
+          price: {
+            amount: concert.eventData.priceRanges?.[0]?.min || 50.00,
+            currency: "USD"
+          },
+          seat: {
+            section: "GA",
+            generalAdmission: true
+          },
+          status: "available"
+        }
+      });
+
+      if (response.data) {
+        alert("Ticket added to My Tickets!");
+      }
+    } catch (error) {
+      console.error("Error adding ticket:", error);
+      alert("Failed to add ticket. Please try again.");
+    }
+  };
 
   const handleSwipe = (dir) => {
     setStyle({
@@ -94,7 +129,11 @@ function Dashboard() {
         <div className="nav-links">
           <Link to="/sellticket" className="nav-button">Sell</Link>
           <Link to="/myticket" className="nav-button">My Ticket</Link>
-          <Link to="/login" className="nav-button">Sign In/Sign Up</Link>
+          {user ? (
+            <Link to="/profile" className="nav-button">Profile</Link>
+          ) : (
+            <Link to="/login" className="nav-button">Sign In/Sign Up</Link>
+          )}
         </div>
       </nav>
 
@@ -130,16 +169,7 @@ function Dashboard() {
             <p>{currentConcert.date} - {currentConcert.venue}</p>
             <button
               className="add-button"
-              onClick={() => {
-                const existing = JSON.parse(localStorage.getItem('myTickets')) || [];
-                const alreadyExists = existing.find(ticket => ticket.id === currentConcert.id);
-                if (!alreadyExists) {
-                  localStorage.setItem('myTickets', JSON.stringify([...existing, currentConcert]));
-                  alert("Ticket added to My Tickets!");
-                } else {
-                  alert("This ticket is already in My Tickets.");
-                }
-              }}
+              onClick={() => addToMyTickets(currentConcert)}
             >
               Add to My Tickets
             </button>
