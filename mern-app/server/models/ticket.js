@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
 
 const ticketSchema = new mongoose.Schema({
-    // event ref 
+    // event data
     event: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Event',
+        type: Object,
         required: true
     },
     
@@ -33,7 +32,7 @@ const ticketSchema = new mongoose.Schema({
         generalAdmission: { type: Boolean, default: false }
     },
     
-    // purchase information; do we need this?
+    // purchase information
     purchase: {
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -43,14 +42,14 @@ const ticketSchema = new mongoose.Schema({
         transactionId: { type: String }
     },
     
-    // little bit extra info, not sure if we need this
+    // restrictions
     restrictions: {
         ageLimit: { type: Number },
         transferable: { type: Boolean, default: true },
         refundable: { type: Boolean, default: false }
     },
     
-    // honestly this would be nice to have, but don't exactly need it
+    // additional info
     barcode: { type: String },
     qrCode: { type: String },
     notes: { type: String },
@@ -64,7 +63,6 @@ const ticketSchema = new mongoose.Schema({
 });
 
 // index
-ticketSchema.index({ event: 1, status: 1 });
 ticketSchema.index({ 'purchase.user': 1 });
 ticketSchema.index({ ticketmasterId: 1 });
 
