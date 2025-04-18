@@ -149,7 +149,7 @@ https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page 
 
 .sign-in-button {
     float: right;
-    background-color: #38a26b;
+    background-color: #00b7ff;
     color: white;
     border: none;
     padding: 10;
@@ -162,7 +162,7 @@ https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page 
 }
 
 .sign-in-button:hover {
-    background-color: #226040;
+    background-color: #0077ff;
 }
 
 .error-message {
@@ -174,3 +174,10 @@ https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page 
     text-align: center;
     font-size: 14px;
 }
+
+.logo-img {
+    height: 160px;
+    margin-left: 85px;
+    object-fit: contain;
+    margin-right: 10px;
+  }

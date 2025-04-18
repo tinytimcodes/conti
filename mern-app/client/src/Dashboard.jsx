@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import { useAuth } from './context/AuthContext';
+import logo from './assets/ContinderLogo.png';
 
 function Dashboard() {
   const [concerts, setConcerts] = useState([]);
@@ -30,21 +31,21 @@ function Dashboard() {
       const res = await axios.get(`http://localhost:5001/api/ticketmaster/search?keyword=${searchTerm}&size=200&page=${page}`);
 
       const events = res.data._embedded?.events || [];
-  
+
       const formatted = events.map(event => ({
         id: event.id,
         artist: event.name.split(' | ')[0],
         date: event.dates?.start?.localDate || "TBA",
         venue: event._embedded?.venues?.[0]?.name || "Unknown Venue",
         image: event.images?.find(img => img.width >= 600)?.url || "",
-        eventData: event // Store the full event data
+        eventData: event // Full event data
       }));
       
       const uniqueByArtist = Array.from(
         new Map(formatted.map(event => [event.artist, event])).values()
       );
       setConcerts(uniqueByArtist);
-      setIndex(0); // Reset to first result
+      setIndex(0);
       setIsSearching(false);
       
     } catch (error) {
@@ -93,7 +94,7 @@ function Dashboard() {
     }
   };
 
-  const handleSwipe = (dir) => {
+  const handleSwipe = (dir, concert) => {
     setStyle({
       transform: `translateX(${dir === 'left' ? '-1000px' : '1000px'}) rotate(${dir === 'left' ? '-30' : '30'}deg)`,
       opacity: 0,
@@ -103,6 +104,9 @@ function Dashboard() {
       setStyle({});
       setIndex((prev) => (prev + 1) % concerts.length); 
     }, 300);
+    if (dir === 'right' && concert) {
+      addToMyTickets(concert);
+    }
   };
 
   const handlePointerDown = (e) => {
@@ -125,7 +129,7 @@ function Dashboard() {
   const handlePointerUp = () => {
     setDragging(false);
     if (Math.abs(deltaX.current) > 100) {
-      handleSwipe(deltaX.current < 0 ? 'left' : 'right');
+      handleSwipe(deltaX.current < 0 ? 'left' : 'right', currentConcert);
     } else {
       setStyle({
         transform: 'translateX(0px) rotate(0deg)',
@@ -138,10 +142,12 @@ function Dashboard() {
   return (
     <div className="dashboard-container">
       <nav className="navbar">
-        <div className="logo">Continder</div>
+        <div className="logo-container">
+        <img className="img" src={logo} alt="Logo" />
+        </div>
         <div className="nav-links">
           <Link to="/sellticket" className="nav-button">Sell</Link>
-          <Link to="/myticket" className="nav-button">My Ticket</Link>
+          <Link to="/myticket" className="nav-button">My Tickets</Link>
           {user ? (
             <Link to="/profile" className="nav-button">Profile</Link>
           ) : (
@@ -150,15 +156,15 @@ function Dashboard() {
         </div>
       </nav>
 
-      <div className="laser-beams">
+      {/* <div className="laser-beams">
         {[...Array(8)].map((_, i) => (
           <div key={i} className={`beam beam-${i + 1}`} />
         ))}
-      </div>
+      </div> */}
 
-      <div className="welcome">
+      {/* <div className="welcome">
         <h1>Welcome to Continder!</h1>
-      </div>
+      </div> */}
 
       <div className="main-content">
         <div className="search-bar">
@@ -193,12 +199,6 @@ function Dashboard() {
             <img src={currentConcert.image} alt={currentConcert.artist} draggable="false" />
             <h3>{currentConcert.artist}</h3>
             <p>{currentConcert.date} - {currentConcert.venue}</p>
-            <button
-              className="add-button"
-              onClick={() => addToMyTickets(currentConcert)}
-            >
-              Add to My Tickets
-            </button>
           </div>
         ) : (
           <div className="no-results">
@@ -208,8 +208,8 @@ function Dashboard() {
 
         {concerts.length > 0 && (
           <div className="swipe-buttons">
-            <button onClick={() => handleSwipe('left')} className="dislike">Dislike</button>
-            <button onClick={() => handleSwipe('right')} className="like">Like</button>
+            <button onClick={() => handleSwipe('left', currentConcert)} className="dislike">Dislike</button>
+            <button onClick={() => handleSwipe('right', currentConcert)} className="like">Like</button>
           </div>
         )}
       </div>
@@ -218,4 +218,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-

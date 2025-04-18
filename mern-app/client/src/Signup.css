@@ -150,7 +150,7 @@
 
 .btn btn-success w-100 rounded-0 {
     float: right;
-    background-color: #000;
+    background-color: #00b7ff;
     color: white;
     border: none;
     padding: 30;
@@ -172,3 +172,4 @@
     text-align: center;
     font-size: 14px;
 }
+
