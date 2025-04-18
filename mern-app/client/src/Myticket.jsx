@@ -75,12 +75,20 @@ function Myticket() {
                   <p>Venue: {ticket.event._embedded?.venues?.[0]?.name}</p>
                   <p>Type: {ticket.type}</p>
                   <p>Price: ${ticket.price.amount} {ticket.price.currency}</p>
+                  <div className="ticket-actions">
                   <button
                     className="remove-button"
                     onClick={() => removeTicket(ticket._id)}
                   >
                     Remove
                   </button>
+                  <button
+                    className="buy-button"
+                    onClick={() => navigate('/checkout', { state: { ticket } })}
+                  >
+                    Buy it
+                  </button>
+                </div>
                 </div>
               </div>
             ))}
