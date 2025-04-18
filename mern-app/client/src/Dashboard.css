@@ -292,3 +292,20 @@
     font-size: 16px;
 }
 
+.error-message {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.error-message p {
+  color: #ff6b6b;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 16px;
+  max-width: 600px;
+  text-align: center;
+}
+
