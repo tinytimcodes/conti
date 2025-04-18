@@ -8,10 +8,10 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Check if user is logged in on initial load
+        // check for user login
         const checkAuth = async () => {
             try {
-                // You might want to add a token-based auth endpoint
+                // regular based endpoint, do we need tokens or something?
                 const response = await axios.get('http://localhost:5001/api/users/me');
                 setUser(response.data);
             } catch (error) {
