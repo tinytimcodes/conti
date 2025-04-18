@@ -39,27 +39,7 @@ function Dashboard() {
       
       const res = await axios.get(`http://localhost:5001/api/ticketmaster/search?keyword=${encodeURIComponent(term)}&size=50&page=${page}`);
 
-<<<<<<< HEAD
-      if (!res.data || !res.data._embedded || !res.data._embedded.events) {
-        console.error("Invalid response format:", res.data);
-        setError("No results found. Please try a different search term.");
-        setConcerts([]);
-        setIsSearching(false);
-        return;
-      }
-
-      const events = res.data._embedded.events;
-      console.log(`Found ${events.length} events`);
-  
-      if (events.length === 0) {
-        setError("No results found. Please try a different search term.");
-        setConcerts([]);
-        setIsSearching(false);
-        return;
-      }
-=======
       const events = res.data._embedded?.events || [];
->>>>>>> 02363140d71433a5d0405488db0c1f8dd5cccdc6
 
       const formatted = events.map(event => ({
         id: event.id,
