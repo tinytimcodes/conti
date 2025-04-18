@@ -10,6 +10,8 @@ function Dashboard() {
   const [index, setIndex] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [style, setStyle] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
   const startX = useRef(0);
   const deltaX = useRef(0);
   const { user } = useAuth();
@@ -18,34 +20,45 @@ function Dashboard() {
   const currentConcert = concerts[index];
 
   useEffect(() => {
-    const fetchConcerts = async () => {
-      try {
-        const page = Math.floor(Math.random() * 5); 
-        const res = await axios.get(`http://localhost:5001/api/ticketmaster/search?keyword=music&size=200&page=${page}`);
-
-        const events = res.data._embedded?.events || [];
-  
-        const formatted = events.map(event => ({
-          id: event.id,
-          artist: event.name.split(' | ')[0],
-          date: event.dates?.start?.localDate || "TBA",
-          venue: event._embedded?.venues?.[0]?.name || "Unknown Venue",
-          image: event.images?.find(img => img.width >= 600)?.url || "",
-          eventData: event // Store the full event data
-        }));
-        
-        const uniqueByArtist = Array.from(
-          new Map(formatted.map(event => [event.artist, event])).values()
-        );
-        setConcerts(uniqueByArtist);
-        
-      } catch (error) {
-        console.error("Error loading concert data:", error.message);
-      }
-    };
-  
     fetchConcerts();
   }, []);
+
+  const fetchConcerts = async (searchTerm = "music") => {
+    try {
+      setIsSearching(true);
+      const page = Math.floor(Math.random() * 5); 
+      const res = await axios.get(`http://localhost:5001/api/ticketmaster/search?keyword=${searchTerm}&size=200&page=${page}`);
+
+      const events = res.data._embedded?.events || [];
+  
+      const formatted = events.map(event => ({
+        id: event.id,
+        artist: event.name.split(' | ')[0],
+        date: event.dates?.start?.localDate || "TBA",
+        venue: event._embedded?.venues?.[0]?.name || "Unknown Venue",
+        image: event.images?.find(img => img.width >= 600)?.url || "",
+        eventData: event // Store the full event data
+      }));
+      
+      const uniqueByArtist = Array.from(
+        new Map(formatted.map(event => [event.artist, event])).values()
+      );
+      setConcerts(uniqueByArtist);
+      setIndex(0); // Reset to first result
+      setIsSearching(false);
+      
+    } catch (error) {
+      console.error("Error loading concert data:", error.message);
+      setIsSearching(false);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      fetchConcerts(searchQuery.trim());
+    }
+  };
 
   const addToMyTickets = async (concert) => {
     if (!user) {
@@ -149,11 +162,24 @@ function Dashboard() {
 
       <div className="main-content">
         <div className="search-bar">
-          <input type="text" placeholder="Search by Artist, Event or Venue" />
-          <button className="search-button">Search</button>
+          <form onSubmit={handleSearch}>
+            <input 
+              type="text" 
+              placeholder="Search by Artist, Event or Venue" 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button type="submit" className="search-button" disabled={isSearching}>
+              {isSearching ? "Searching..." : "Search"}
+            </button>
+          </form>
         </div>
 
-        {currentConcert ? (
+        {isSearching ? (
+          <div className="loading-container">
+            <p style={{ color: 'white' }}>Searching for artists...</p>
+          </div>
+        ) : concerts.length > 0 ? (
           <div
             className="concert-card draggable"
             style={style}
@@ -175,13 +201,17 @@ function Dashboard() {
             </button>
           </div>
         ) : (
-          <p style={{ color: 'white' }}>Loading concerts...</p>
+          <div className="no-results">
+            <p style={{ color: 'white' }}>No artists found. Try a different search term.</p>
+          </div>
         )}
 
-        <div className="swipe-buttons">
-          <button onClick={() => handleSwipe('left')} className="dislike">Dislike</button>
-          <button onClick={() => handleSwipe('right')} className="like">Like</button>
-        </div>
+        {concerts.length > 0 && (
+          <div className="swipe-buttons">
+            <button onClick={() => handleSwipe('left')} className="dislike">Dislike</button>
+            <button onClick={() => handleSwipe('right')} className="like">Like</button>
+          </div>
+        )}
       </div>
     </div>
   );

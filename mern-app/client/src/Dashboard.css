@@ -149,33 +149,57 @@
 .search-bar {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 10px;
     margin-bottom: 20px;
+    width: 100%;
+}
+
+.search-bar form {
+    display: flex;
+    width: 100%;
+    max-width: 600px;
 }
 
 .search-bar input {
-    width: 700px; 
-    max-width: 90%;
-    padding: 14px;
-    font-size: 16px;
-    border-radius: 8px;
+    flex: 1;
+    padding: 12px 15px;
     border: none;
-    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
-.search-button {
+.search-bar .search-button {
     padding: 12px 20px;
-    font-size: 16px;
-    background-color: #38a26b;
+    background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 0 4px 4px 0;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
 }
 
-.search-button:hover {
-    background-color: #226040;
+.search-bar .search-button:hover {
+    background-color: #45a049;
+}
+
+.search-bar .search-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.loading-container, .no-results {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    width: 100%;
+    text-align: center;
+}
+
+.loading-container p, .no-results p {
+    font-size: 18px;
+    color: white;
 }
 
 .concert-card {
