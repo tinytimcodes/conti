@@ -13,6 +13,7 @@ function Dashboard() {
   const [style, setStyle] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [error, setError] = useState("");
   const startX = useRef(0);
   const deltaX = useRef(0);
   const { user } = useAuth();
@@ -21,14 +22,22 @@ function Dashboard() {
   const currentConcert = concerts[index];
 
   useEffect(() => {
-    fetchConcerts();
+    fetchConcerts("music");
   }, []);
 
-  const fetchConcerts = async (searchTerm = "music") => {
+  const fetchConcerts = async (searchTerm) => {
     try {
       setIsSearching(true);
-      const page = Math.floor(Math.random() * 5); 
-      const res = await axios.get(`http://localhost:5001/api/ticketmaster/search?keyword=${searchTerm}&size=200&page=${page}`);
+      setError("");
+      
+      // Ensure we have a valid search term
+      const term = searchTerm || "music";
+      
+      // Use a fixed page for more consistent results
+      const page = 0; 
+      console.log(`Searching for: ${term}, page: ${page}`);
+      
+      const res = await axios.get(`http://localhost:5001/api/ticketmaster/search?keyword=${encodeURIComponent(term)}&size=50&page=${page}`);
 
       const events = res.data._embedded?.events || [];
 
@@ -44,20 +53,36 @@ function Dashboard() {
       const uniqueByArtist = Array.from(
         new Map(formatted.map(event => [event.artist, event])).values()
       );
+      
+      console.log(`Found ${uniqueByArtist.length} unique artists`);
+      
+      if (uniqueByArtist.length === 0) {
+        setError("No artists found. Please try a different search term.");
+        setConcerts([]);
+        setIsSearching(false);
+        return;
+      }
+      
       setConcerts(uniqueByArtist);
       setIndex(0);
       setIsSearching(false);
       
     } catch (error) {
-      console.error("Error loading concert data:", error.message);
+      console.error("Error loading concert data:", error);
+      setError("Failed to search. Please try again.");
+      setConcerts([]);
       setIsSearching(false);
     }
   };
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      fetchConcerts(searchQuery.trim());
+    const query = searchQuery.trim();
+    if (query) {
+      console.log(`Searching for: ${query}`);
+      fetchConcerts(query);
+    } else {
+      setError("Please enter a search term");
     }
   };
 
@@ -181,6 +206,12 @@ function Dashboard() {
           </form>
         </div>
 
+        {error && (
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
+        )}
+
         {isSearching ? (
           <div className="loading-container">
             <p style={{ color: 'white' }}>Searching for artists...</p>
@@ -200,11 +231,11 @@ function Dashboard() {
             <h3>{currentConcert.artist}</h3>
             <p>{currentConcert.date} - {currentConcert.venue}</p>
           </div>
-        ) : (
+        ) : !isSearching && !error ? (
           <div className="no-results">
             <p style={{ color: 'white' }}>No artists found. Try a different search term.</p>
           </div>
-        )}
+        ) : null}
 
         {concerts.length > 0 && (
           <div className="swipe-buttons">

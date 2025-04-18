@@ -7,8 +7,85 @@
   color: white;
   font-family: 'Inter', sans-serif;
   text-align: center;
+  padding: 20px;
 }
 
 .sellticket-container h1 {
   font-size: 36px;
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+
+.sellticket-form-container {
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.sellticket-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sellticket-form-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.sellticket-form-group label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+/* Updated selector to ensure all inputs have the same background */
+.sellticket-form-group input,
+.sellticket-form input[type="text"],
+.sellticket-form input[type="number"],
+.sellticket-form input[type="date"] {
+  padding: 12px 15px;
+  border-radius: 5px;
+  border: 1px solid #444;
+  background-color: #333 !important;
+  color: white;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.sellticket-form-group input:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+.sellticket-submit-btn {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 10px;
+}
+
+.sellticket-submit-btn:hover {
+  background-color: #3a7bc8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .sellticket-form-container {
+    padding: 20px;
+  }
+  
+  .sellticket-container h1 {
+    font-size: 28px;
+  }
 }
