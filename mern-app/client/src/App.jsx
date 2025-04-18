@@ -6,6 +6,7 @@ import Login from './Login'
 import Dashboard from './Dashboard'
 import Myticket from './Myticket'
 import Sellticket from './Sellticket'
+import Checkout from './Checkout'
 import { AuthProvider } from './context/AuthContext'
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path = '/dashboard' element = {<Dashboard/>}></Route>
           <Route path = '/myticket' element = {<Myticket/>}></Route>
           <Route path = '/sellticket' element = {<Sellticket/>}></Route>
+          <Route path = '/checkout' element = {<Checkout/>}></Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
