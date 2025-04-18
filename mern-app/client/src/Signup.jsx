@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './Signup.css';
 import { useNavigate } from 'react-router-dom';
+import logo from './assets/ContinderLogo-Photoroom.jpg';
  
 
 function Signup() {
@@ -40,11 +41,9 @@ function Signup() {
                 <div className="beam beam-7"></div>
                 <div className="beam beam-8"></div>
             </div>
-            <div className="brand">
-                <h1>Continder</h1>
-            </div>
             <div className="login-box">
                 <div className="form-wrapper">
+                    <img src={logo} alt="Continder Logo" className="logo-img" />
                     <h2>Sign Up</h2>
                     {error && <div className="error-message">{error}</div>}
                     <form onSubmit={handleSubmit}>
@@ -89,9 +88,7 @@ function Signup() {
                                 required
                             />
                         </div>
-                        <button type="submit" className="btn btn-success w-100 rounded-0">
-                            Sign Up
-                        </button>
+                        <button type="submit" className="sign-in-button">Sign Out</button>
                     </form>
                     <div className="signin-link">
                         Already have an account? <Link to='/login'>Sign In</Link>

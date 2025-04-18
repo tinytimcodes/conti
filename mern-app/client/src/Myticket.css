@@ -4,6 +4,9 @@
   color: white;
   min-height: 100vh;
   text-align: center;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 .myticket-container h1 {
@@ -12,21 +15,46 @@
   color: #ffffff;
 }
 
+.tickets-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #ffffff;
+}
+
 .ticket-grid {
+  /* display: flex;
+  flex-direction: row; */
+  gap: 24px;
+  /* overflow-x: auto; */
+  padding: 20px 0;
+  width: 100%;
+  max-width: 100vw;
+}
+
+.tickets-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
   justify-items: center;
+  padding: 20px 0;
 }
 
+
 .ticket-card {
+  flex: 0 0 260px;
+  max-width: 260px;
   background: #ffffff;
   border-radius: 12px;
   padding: 16px;
-  width: 260px;
   color: #000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  transition: transform 0.2s;
+  /* scroll-snap-align: start;
+  flex: 0 0 260px;
+  max-width: 260px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
 }
 
 .ticket-card:hover {
@@ -102,4 +130,35 @@
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
+}
+
+.ticket-actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 12px;
+}
+
+.ticket-info h3 {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px 0;
+  min-height: 60px; /* or adjust to your liking */
+}
+
+.navbar, .navbar-inner {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: absolute;
+  right: 2px;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }

@@ -9,7 +9,7 @@
     justify-content: center;
 }
 
-.laser-beams {
+/* .laser-beams {
     position: absolute;
     top: 0;
     left: 0;
@@ -26,9 +26,9 @@
     right: -50%;
     top: 0;
     transform-origin: 50% 50%;
-}
+} */
 
-.beam-1 {
+/* .beam-1 {
     background-color: #00b7ff;
     transform: rotate(25deg) translateY(150px);
 }
@@ -66,7 +66,7 @@
 .beam-8 {
     background-color: #00ffff;
     transform: rotate(-10deg) translateY(500px);
-}
+} */
 
 .welcome {
     position: absolute;
@@ -79,37 +79,40 @@
 }
 
 .welcome h1 {
-  background-color: rgba(81, 19, 102, 0.428);
-  padding: 8px 20px;
-  font-size: 38px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  color: rgb(227, 222, 222);
-  border-radius: 9px;  
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);  
-  display: inline-block; 
-  font-family: 'Inter', sans-serif; 
+    background: rgba(131, 56, 236, 0.8);
+    color: white;
+    font-size: 38px;
+    padding: 12px 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px #8338ec;
+    font-family: 'Orbitron', sans-serif;
 }
 
 .navbar {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.08);
+    padding: 12px 28px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     position: absolute;
     top: 0;
-    left: 0;
     width: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 12px 30px;
-    color: white;
-    font-size: 18px;
+    z-index: 20;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.logo {
-    font-weight: bold;
-    font-size: 22px;
-    z-index: 10;
+img {
+    height: 60px;
 }
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
 
 .nav-links {
     display: flex;
@@ -133,6 +136,7 @@
 
 .nav-button:hover {
     background-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 8px #00f0ff, 0 0 16px #00f0ff, 0 0 32px #00f0ff;
 }
 
 .main-content {
@@ -170,7 +174,9 @@
 
 .search-bar .search-button {
     padding: 12px 20px;
-    background-color: #4CAF50;
+    background-color: #ff009d;
+    border: 2px solid #ff009d;
+    box-shadow: 0 0 20px #ff009d;
     color: white;
     border: none;
     border-radius: 0 4px 4px 0;
@@ -203,12 +209,13 @@
 }
 
 .concert-card {
-    background: rgb(0, 0, 0);
+    background: linear-gradient(to bottom, #0f0f0f, #1e1e1e);
     width: 750px; 
-    height: 540px;
+    height: 500px;
     padding: 20px 10px 10px 24px;
     border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    border: 2px solid #00b7ff;
+    box-shadow: 0 0 20px #00b7ff;
     text-align: center;
     overflow: hidden;
     margin: 0 auto;
@@ -250,11 +257,15 @@
   
   .dislike {
     background-color: #e74c3c;
+    border: 2px solid #e74c3c;
+    box-shadow: 0 0 20px #e74c3c;
     color: white;
   }
   
   .like {
     background-color: #2ecc71;
+    border: 2px solid #2ecc71;
+    box-shadow: 0 0 20px #2ecc71;
     color: white;
   }
   
@@ -292,20 +303,14 @@
     font-size: 16px;
 }
 
-.error-message {
-  display: flex;
-  justify-content: center;
-  margin: 10px 0;
-  width: 100%;
-}
-
-.error-message p {
-  color: #ff6b6b;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 10px 15px;
-  border-radius: 4px;
-  font-size: 16px;
-  max-width: 600px;
-  text-align: center;
-}
+.dashboard-container {
+    min-height: 100vh;
+    width: 100%;
+    position: relative;
+    background: radial-gradient(circle at center, #1e1e1e 40%, #000000 100%);
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
 
