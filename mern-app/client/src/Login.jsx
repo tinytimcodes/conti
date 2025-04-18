@@ -1,28 +1,26 @@
 import { useState } from "react";
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext';
+import logo from './assets/ContinderLogo-Photoroom.jpg';
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-
+    const { login } = useAuth();
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(""); // Clear any previous errors
-        axios.post('http://localhost:5001/api/users/login', {email, password})
-            .then(result => {
-                console.log(result);
-                navigate('/dashboard'); // Only navigate on successful login
-            })
-            .catch(err => {
-                console.log(err);
-                setError("Invalid email or password. Please try again.");
-            });
+        setError("");
+        try {
+            await login(email, password);
+            navigate('/dashboard');
+        } catch (err) {
+            console.error(err);
+            setError("Invalid email or password. Please try again.");
+        }
     }
 
     return (
@@ -37,11 +35,9 @@ function Login() {
                 <div className="beam beam-7"></div>
                 <div className="beam beam-8"></div>
             </div>
-            <div className="brand">
-                <h1>Continder</h1>
-            </div>
             <div className="login-box">
                 <div className="form-wrapper">
+                <img src={logo} alt="Continder Logo" className="logo-img" />
                     <h2>Sign In</h2>
                     {error && <div className="error-message">{error}</div>}
                     <form onSubmit={handleSubmit}>

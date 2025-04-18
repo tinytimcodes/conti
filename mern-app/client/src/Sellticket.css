@@ -1,0 +1,14 @@
+.sellticket-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e1e1e;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.sellticket-container h1 {
+  font-size: 36px;
+}

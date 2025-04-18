@@ -4,11 +4,14 @@ import Signup from './Signup'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Login from './Login'
 import Dashboard from './Dashboard'
-
+import Myticket from './Myticket'
+import Sellticket from './Sellticket'
+import Checkout from './Checkout'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
-    <div>
+    <AuthProvider>
       <BrowserRouter>
         <Routes> 
           <Route path = '/' element = {<Login/>}></Route>  
@@ -16,9 +19,12 @@ function App() {
           <Route path = '/signup' element = {<Signup/>}></Route>
           <Route path = '/register' element = {<Signup/>}></Route>
           <Route path = '/dashboard' element = {<Dashboard/>}></Route>
+          <Route path = '/myticket' element = {<Myticket/>}></Route>
+          <Route path = '/sellticket' element = {<Sellticket/>}></Route>
+          <Route path = '/checkout' element = {<Checkout/>}></Route>
         </Routes>
       </BrowserRouter>
-    </div>
+    </AuthProvider>
   );
 }
 
