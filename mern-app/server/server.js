@@ -4,6 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes")
 const ticketmasterRoutes = require("./routes/ticketmasterRoutes")
+const ticketRoutes = require("./routes/ticketRoutes")
 
 
 dotenv.config(); // load env variables here
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use("/api/users", userRoutes)
 app.use("/api/ticketmaster", ticketmasterRoutes)
+app.use("/api/tickets", ticketRoutes)
 
 // testing route
 app.get("/", (req, res) => {

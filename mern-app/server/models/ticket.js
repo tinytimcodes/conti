@@ -16,6 +16,23 @@ const ticketSchema = new mongoose.Schema({
         default: 'available'
     },
     
+    // selling related fields
+    seller: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+    listingDate: { type: Date },
+    isListed: { type: Boolean, default: false },
+    saleStatus: {
+        type: String,
+        enum: ['active', 'pending', 'sold', 'cancelled'],
+        default: 'active'
+    },
+    askingPrice: {
+        amount: { type: Number },
+        currency: { type: String, default: 'USD' }
+    },
+    
     // pricing and currency
     price: {
         amount: { type: Number, required: true },
@@ -32,7 +49,7 @@ const ticketSchema = new mongoose.Schema({
         generalAdmission: { type: Boolean, default: false }
     },
     
-    // purchase information
+    // purchase information; do we need this?
     purchase: {
         user: {
             type: mongoose.Schema.Types.ObjectId,
@@ -42,14 +59,14 @@ const ticketSchema = new mongoose.Schema({
         transactionId: { type: String }
     },
     
-    // restrictions
+    // little bit extra info, not sure if we need this
     restrictions: {
         ageLimit: { type: Number },
         transferable: { type: Boolean, default: true },
         refundable: { type: Boolean, default: false }
     },
     
-    // additional info
+    // honestly this would be nice to have, but don't exactly need it
     barcode: { type: String },
     qrCode: { type: String },
     notes: { type: String },
@@ -62,9 +79,11 @@ const ticketSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// index
+// indexes
 ticketSchema.index({ 'purchase.user': 1 });
 ticketSchema.index({ ticketmasterId: 1 });
+ticketSchema.index({ seller: 1 });
+ticketSchema.index({ isListed: 1, saleStatus: 1 });
 
 const Ticket = mongoose.model("Ticket", ticketSchema);
 module.exports = Ticket;
