@@ -31,15 +31,44 @@ export default function MyTickets() {
     fetchTickets();
   }, [user, navigate]);
 
-  const removeTicket = async (ticketId) => {
+  // If you still want to allow deleting from boughtTickets
+  // const removeTicket = async (ticketId) => {
+  //   try {
+  //     await axios.delete(
+  //       `http://localhost:5001/api/users/${user._id}/boughtTickets/${ticketId}`
+  //     );
+  //     setTickets(prev => prev.filter(t => t._id !== ticketId));
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert('Failed to remove ticket.');
+  //   }
+  // };
+
+  // New: list ticket globally in soldTickets collection
+  const sellTicket = async (ticket) => {
     try {
-      await axios.delete(`http://localhost:5001/api/users/${user._id}/tickets/${ticketId}`);
-      setTickets(prev => prev.filter(t => t._id !== ticketId));
+      const price = prompt("Enter your asking price:");
+      if (!price) return;
+  
+      const resp = await axios.post(
+        "http://localhost:5001/api/soldTickets",
+        {
+          ticketId: ticket._id,
+          sellerId: user._id,
+          askingPrice: {
+            amount: Number(price),
+            currency: ticket.price.currency
+          }
+        }
+      );
+      console.log("SoldTicket response:", resp);
+      alert("Ticket listed globally!");
     } catch (err) {
-      console.error(err);
-      alert('Failed to remove ticket.');
+      // ← more detailed logging:
+      console.error("Listing error:", err.response?.status, err.response?.data || err.message);
+      alert(`Failed to list ticket: ${err.response?.data?.message || err.message}`);
     }
-  };
+  };  
 
   if (loading) {
     return (
@@ -53,19 +82,17 @@ export default function MyTickets() {
     <div className="myticket-container">
       <nav className="navbar">
         <div className="logo-container">
-        <img className="img" src={logo} alt="Logo" />
+          <img className="img" src={logo} alt="Logo" />
         </div>
-          <div className="nav-links">
+        <div className="nav-links">
           <Link to="/dashboard" className="nav-button">Home</Link>
           <Link to="/sellticket" className="nav-button">Sell</Link>
           <Link to="/myticket" className="nav-button">Liked Tickets</Link>
-          <Link to="/profile" className="nav-button">Profile</Link>
           <Link to="/" className="nav-button">Logout</Link>
-          </div>
+        </div>
       </nav>
 
       <h1>My Tickets</h1>
-
       <div className="tickets-container">
         {tickets.length === 0 ? (
           <p className="empty">You haven't bought any tickets yet.</p>
@@ -86,8 +113,8 @@ export default function MyTickets() {
                 </div>
                 <div className="ticket-actions">
                   <button
-                    className="remove-button"
-                    onClick={() => removeTicket(ticket._id)}
+                    className="sell-button"
+                    onClick={() => sellTicket(ticket)}
                   >
                     Sell Ticket
                   </button>
