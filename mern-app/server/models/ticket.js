@@ -28,10 +28,10 @@ const ticketSchema = new mongoose.Schema({
         enum: ['active', 'pending', 'sold', 'cancelled'],
         default: 'active'
     },
-    askingPrice: {
-        amount: { type: Number },
-        currency: { type: String, default: 'USD' }
-    },
+    // askingPrice: {
+    //     amount: { type: Number },
+    //     currency: { type: String, default: 'USD' }
+    // },
     
     // pricing and currency
     price: {
