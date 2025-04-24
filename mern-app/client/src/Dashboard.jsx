@@ -178,25 +178,16 @@ function Dashboard() {
           <Link to="/sellticket" className="nav-button">Sell</Link>
           <Link to="/tickets" className="nav-button">My Tickets</Link>
           <Link to="/myticket" className="nav-button">Liked Tickets</Link>
-          {user ? (
-            <Link to="/profile" className="nav-button">Profile</Link>
-          ) : (
-            <Link to="/login" className="nav-button">Logout</Link>
-          )}
+          <Link to="/login" className="nav-button">Logout</Link>
         </div>
       </nav>
 
-      {/* <div className="laser-beams">
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className={`beam beam-${i + 1}`} />
-        ))}
-      </div> */}
-
-      {/* <div className="welcome">
-        <h1>Welcome to Continder!</h1>
-      </div> */}
-
       <div className="main-content">
+        {user && (
+            <h2 className="welcome-message">
+              Welcome, {user.name || user.username || user.email}!
+            </h2>
+          )}
         <div className="search-bar">
           <form onSubmit={handleSearch}>
             <input 

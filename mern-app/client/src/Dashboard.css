@@ -145,7 +145,7 @@ img {
     left: 50%;
     transform: translateX(-50%);
     text-align: center;
-    color: white;
+    color: #00f0ff;
     z-index: 10;
     width: 100%;
 }
