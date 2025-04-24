@@ -208,7 +208,7 @@ function Dashboard() {
         <img className="img" src={logo} alt="Logo" />
         </div>
         <div className="nav-links">
-          <Link to="/sellticket" className="nav-button">Sell</Link>
+          <Link to="/sellticket" className="nav-button">Marketplace</Link>
           <Link to="/tickets" className="nav-button">My Tickets</Link>
           <Link to="/myticket" className="nav-button">Liked Tickets</Link>
           <Link to="/login" className="nav-button">Logout</Link>

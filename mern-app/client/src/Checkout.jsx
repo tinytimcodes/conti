@@ -61,7 +61,7 @@ function Checkout() {
                 </div>
         <div className="nav-links">
           <Link to="/dashboard" className="nav-button">Home</Link>
-          <Link to="/sellticket" className="nav-button">Sell</Link>
+          <Link to="/sellticket" className="nav-button">Marketplace</Link>
           <Link to="/tickets" className="nav-button">My Tickets</Link>
           <Link to="/myticket" className="nav-button">Liked Tickets</Link>
           <Link to="/" className="nav-button">Logout</Link>
