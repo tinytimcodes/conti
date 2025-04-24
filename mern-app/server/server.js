@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes")
 const ticketmasterRoutes = require("./routes/ticketmasterRoutes")
 const ticketRoutes = require("./routes/ticketRoutes")
+const soldTicketRoutes = require("./routes/soldTicketRoutes")
 
 
 dotenv.config(); // load env variables here
@@ -38,6 +39,7 @@ app.use(cors(corsOptions));
 app.use("/api/users", userRoutes)
 app.use("/api/ticketmaster", ticketmasterRoutes)
 app.use("/api/tickets", ticketRoutes)
+app.use("/api/soldTickets", soldTicketRoutes);
 
 // testing route
 app.get("/", (req, res) => {
