@@ -81,7 +81,6 @@ const ticketSchema = new mongoose.Schema({
 
 // indexes
 ticketSchema.index({ 'purchase.user': 1 });
-ticketSchema.index({ ticketmasterId: 1 });
 ticketSchema.index({ seller: 1 });
 ticketSchema.index({ isListed: 1, saleStatus: 1 });
 

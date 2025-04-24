@@ -100,30 +100,51 @@ function Dashboard() {
         date: concert.date,
         venue: concert.venue,
         images: [{ url: concert.image }],
-        id: concert.id
+        id: concert.id,
+        dates: {
+          start: {
+            localDate: concert.date
+          }
+        },
+        _embedded: {
+          venues: [{
+            name: concert.venue
+          }]
+        }
       };
+
+      const ticketPrice = concert.eventData.priceRanges?.[0]?.min || 50.00;
+
+      const ticketData = {
+        event: formattedEvent,
+        ticketmasterId: concert.id,
+        type: "General Admission",
+        price: {
+          amount: ticketPrice,
+          currency: "USD",
+          fees: ticketPrice * 0.1,
+          total: ticketPrice * 1.1
+        },
+        seat: {
+          section: "GA",
+          generalAdmission: true
+        },
+        status: "available",
+        isListed: false,
+        saleStatus: "active"
+      };
+
+      console.log('Sending ticket data:', JSON.stringify(ticketData, null, 2));
 
       // Add to liked tickets
       await axios.post(`http://localhost:5001/api/users/${user._id}/likedTickets`, {
-        ticketData: {
-          event: formattedEvent,
-          ticketmasterId: concert.id,
-          type: "General Admission",
-          price: {
-            amount: concert.eventData.priceRanges?.[0]?.min || 50.00,
-            currency: "USD"
-          },
-          seat: {
-            section: "GA",
-            generalAdmission: true
-          },
-          status: "available"
-        }
+        ticketData
       });
 
       alert("Ticket added to liked tickets!");
     } catch (error) {
-      console.error("Error adding ticket to liked tickets:", error);
+      console.error("Full error object:", error);
+      console.error("Error response data:", error.response?.data);
       if (error.response?.status === 404) {
         alert("User not found. Please try logging in again.");
       } else if (error.response?.status === 400) {
