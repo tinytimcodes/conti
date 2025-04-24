@@ -1,120 +1,83 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate }             from 'react-router-dom';
+import axios                             from 'axios';
+import { useAuth }                       from './context/AuthContext';
 import './Sellticket.css';
-import { Link, useNavigate } from 'react-router-dom';
-import logo from './assets/ContinderLogo.png';
-import { useAuth } from './context/AuthContext';
+import logo                              from './assets/ContinderLogo.png';
 
-function SellTicket() {
-  const { user } = useAuth();
-  const [ticketData, setTicketData] = useState({
-    artist: '',
-    price: '',
-    location: '',
-    date: ''
-  });
+export default function SellTicket() {
+  const { user }      = useAuth();
+  const navigate      = useNavigate();
+  const [soldTickets, setSoldTickets] = useState([]);
+  const [loading, setLoading]         = useState(true);
 
-  const navigate = useNavigate();
+  useEffect(() => {
+    axios
+      .get('http://localhost:5001/api/soldTickets')
+      .then(res => setSoldTickets(res.data))
+      .catch(err => console.error('Error fetching sold tickets:', err))
+      .finally(() => setLoading(false));
+  }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setTicketData(prevData => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Ticket data:', ticketData);
-    // Here you would later add code to send this data to MongoDB
-    alert('Ticket listed successfully!');
-    // Reset form
-    setTicketData({
-      artist: '',
-      price: '',
-      location: '',
-      date: ''
-    });
-    navigate('/Dashboard');
-  };
+  if (loading) return <div className="loading">Loading marketplace…</div>;
 
   return (
-    <div className="dashboard-container">
+    <div className="sellticket-container">
       <nav className="navbar">
         <div className="logo-container">
-        <img className="img" src={logo} alt="Logo" />
+          <img src={logo} alt="Logo" className="img" />
         </div>
         <div className="nav-links">
-          <Link to="/dashboard" className="nav-button">Home</Link>
-          <Link to="/tickets" className="nav-button">My Tickets</Link>
+          <Link to="/dashboard"    className="nav-button">Home</Link>
+          <Link to="/tickets"     className="nav-button">My Tickets</Link>
           <Link to="/myticket" className="nav-button">Liked Tickets</Link>
-          <Link to="/" className="nav-button">Logout</Link>
+          <Link to="/"             className="nav-button">Logout</Link>
         </div>
       </nav>
-      <div className="sellticket-container">
-        <div className="sellticket-form-container">
-          <h1>Sell Ticket</h1>
-          <form onSubmit={handleSubmit} className="sellticket-form">
-            <div className="sellticket-form-group">
-              <label htmlFor="artist">Artist</label>
-              <input
-                type="text"
-                id="artist"
-                name="artist"
-                value={ticketData.artist}
-                onChange={handleChange}
-                required
-                placeholder="Enter artist name"
-              />
-            </div>
-            
-            <div className="sellticket-form-group">
-              <label htmlFor="price">Price ($)</label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                value={ticketData.price}
-                onChange={handleChange}
-                required
-                min="0"
-                step="0.01"
-                placeholder="Enter ticket price"
-              />
-            </div>
-            
-            <div className="sellticket-form-group">
-              <label htmlFor="location">Location</label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                value={ticketData.location}
-                onChange={handleChange}
-                required
-                placeholder="Enter venue location"
-              />
-            </div>
-            
-            <div className="sellticket-form-group">
-              <label htmlFor="date">Date</label>
-              <input
-                type="date"
-                id="date"
-                name="date"
-                value={ticketData.date}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <button type="submit" className="sellticket-submit-btn">List Ticket</button>
-          </form>
+
+      <h2>Marketplace</h2>
+      {soldTickets.length === 0 ? (
+        <p className="no-tickets">No sold tickets yet.</p>
+      ) : (
+        <div className="tickets-grid">
+          {soldTickets.map(({ _id, ticket, seller, askingPrice, soldAt }) => {
+            // `ticket` is populated Ticket doc
+            const ev   = ticket.event || {};
+            const price = askingPrice?.amount != null
+              ? `$${askingPrice.amount.toFixed(2)} ${askingPrice.currency}`
+              : 'Not set';
+            return (
+              <div key={_id} className="ticket-card">
+                <img
+                  src={ev.images?.[0]?.url || 'placeholder.jpg'}
+                  alt={ev.name || 'Event'}
+                />
+                <div className="ticket-info">
+                  <h3>{ev.name || 'Unnamed Event'}</h3>
+                  <p>Date: {ev.dates?.start?.localDate || 'Unknown'}</p>
+                  <p>Venue: {ev._embedded?.venues?.[0]?.name || 'Unknown'}</p>
+                  <p>Type: {ticket.type}</p>
+                  <p>Price: {price}</p>
+                  <p>Seller: {seller.name || seller.email}</p>
+                  <p>Sold At: {new Date(soldAt).toLocaleString()}</p>
+                </div>
+                <div className="ticket-actions">
+                  <button
+                    className="buy-button"
+                    onClick={() => {
+                      if (!user) return navigate('/login');
+                      navigate(`/checkout/${ticket._id}`, { state: { ticket } });
+                    }}
+                  >
+                    Buy It
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </div>
+      )}
     </div>
   );
 }
-
-export default SellTicket;
-
+;
