@@ -8,7 +8,7 @@ const ticketSchema = new mongoose.Schema({
     },
     
     // specific ticket details
-    ticketmasterId: { type: String, required: true, unique: true },
+    ticketmasterId: { type: String, required: true },
     type: { type: String, required: true },
     status: { 
         type: String, 

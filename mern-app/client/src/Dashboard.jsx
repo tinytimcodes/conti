@@ -94,10 +94,19 @@ function Dashboard() {
     }
 
     try {
+      // Format the event data to match what we need
+      const formattedEvent = {
+        name: concert.artist,
+        date: concert.date,
+        venue: concert.venue,
+        images: [{ url: concert.image }],
+        id: concert.id
+      };
+
       // Add to liked tickets
       await axios.post(`http://localhost:5001/api/users/${user._id}/likedTickets`, {
         ticketData: {
-          event: concert.eventData,
+          event: formattedEvent,
           ticketmasterId: concert.id,
           type: "General Admission",
           price: {
