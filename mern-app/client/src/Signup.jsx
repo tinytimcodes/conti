@@ -88,7 +88,7 @@ function Signup() {
                                 required
                             />
                         </div>
-                        <button type="submit" className="sign-in-button">Sign Out</button>
+                        <button type="submit" className="sign-in-button">Sign Up</button>
                     </form>
                     <div className="signin-link">
                         Already have an account? <Link to='/login'>Sign In</Link>

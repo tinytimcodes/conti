@@ -59,7 +59,6 @@ export default function MyTickets() {
           <Link to="/dashboard" className="nav-button">Home</Link>
           <Link to="/sellticket" className="nav-button">Sell</Link>
           <Link to="/myticket" className="nav-button">Liked Tickets</Link>
-          <Link to="/profile" className="nav-button">Profile</Link>
           <Link to="/" className="nav-button">Logout</Link>
           </div>
       </nav>
