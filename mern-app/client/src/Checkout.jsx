@@ -26,7 +26,7 @@ function Checkout() {
 
   const handlePurchase = async () => {
     if (!user) {
-      navigate('/login');
+      navigate('/myticket');
       return;
     }
 
