@@ -31,20 +31,8 @@ export default function MyTickets() {
     fetchTickets();
   }, [user, navigate]);
 
-  // If you still want to allow deleting from boughtTickets
-  // const removeTicket = async (ticketId) => {
-  //   try {
-  //     await axios.delete(
-  //       `http://localhost:5001/api/users/${user._id}/boughtTickets/${ticketId}`
-  //     );
-  //     setTickets(prev => prev.filter(t => t._id !== ticketId));
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert('Failed to remove ticket.');
-  //   }
-  // };
 
-  // New: list ticket globally in soldTickets collection
+  // list ticket globally in soldTickets collection
   const sellTicket = async (ticket) => {
     try {
       const price = prompt("Enter your asking price:");
@@ -64,7 +52,7 @@ export default function MyTickets() {
       console.log("SoldTicket response:", resp);
       alert("Ticket listed globally!");
     } catch (err) {
-      // ← more detailed logging:
+      // more detailed logging:
       console.error("Listing error:", err.response?.status, err.response?.data || err.message);
       alert(`Failed to list ticket: ${err.response?.data?.message || err.message}`);
     }

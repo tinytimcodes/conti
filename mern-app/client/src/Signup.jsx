@@ -17,7 +17,7 @@ function Signup() {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        setError("") // Clear any previous errors
+        setError("") // clear any errors
         axios.post('http://localhost:5001/api/users/register', {name, email, password})
         .then(result => {
             console.log(result)
