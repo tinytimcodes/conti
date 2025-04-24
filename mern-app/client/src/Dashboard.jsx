@@ -94,7 +94,8 @@ function Dashboard() {
     }
 
     try {
-      const response = await axios.post(`http://localhost:5001/api/users/${user._id}/tickets`, {
+      // Add to liked tickets
+      await axios.post(`http://localhost:5001/api/users/${user._id}/likedTickets`, {
         ticketData: {
           event: concert.eventData,
           ticketmasterId: concert.id,
@@ -111,14 +112,16 @@ function Dashboard() {
         }
       });
 
-      setConcerts(prev => prev.filter(c => c.id !== concert.id));
-      setIndex(0);
-      if (response.data) {
-        alert("Ticket added to My Tickets!");
-      }
+      alert("Ticket added to liked tickets!");
     } catch (error) {
-      console.error("Error adding ticket:", error);
-      alert("Failed to add ticket. Please try again.");
+      console.error("Error adding ticket to liked tickets:", error);
+      if (error.response?.status === 404) {
+        alert("User not found. Please try logging in again.");
+      } else if (error.response?.status === 400) {
+        alert("You've already liked this ticket.");
+      } else {
+        alert("Failed to add ticket to liked tickets. Please try again.");
+      }
     }
   };
 
@@ -186,16 +189,7 @@ function Dashboard() {
         </div>
       </nav>
 
-      {/* <div className="laser-beams">
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className={`beam beam-${i + 1}`} />
-        ))}
-      </div> */}
-
-      {/* <div className="welcome">
-        <h1>Welcome to Continder!</h1>
-      </div> */}
-
+      
       <div className="main-content">
         <div className="search-bar">
           <form onSubmit={handleSearch}>
