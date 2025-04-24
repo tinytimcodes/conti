@@ -14,15 +14,14 @@ export default function MyTickets() {
   useEffect(() => {
     const fetchTickets = async () => {
       if (!user) {
-        navigate(`/checkout/${ticket._id}`);
+        navigate('/login');
         return;
       }
       try {
         const { data } = await axios.get(
-          `http://localhost:5001/api/users/${user._id}/tickets`
+          `http://localhost:5001/api/users/${user._id}/boughtTickets`
         );
-        // only keep tickets that were actually bought:
-        setTickets(data.filter(t => t.status === 'purchased'));
+        setTickets(data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -69,7 +68,7 @@ export default function MyTickets() {
 
       <div className="tickets-container">
         {tickets.length === 0 ? (
-          <p className="empty">You haven’t bought any tickets yet.</p>
+          <p className="empty">You haven't bought any tickets yet.</p>
         ) : (
           <div className="tickets-grid">
             {tickets.map(ticket => (
