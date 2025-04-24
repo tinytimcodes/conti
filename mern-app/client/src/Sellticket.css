@@ -14,6 +14,10 @@
   color: #ffffff;
 }
 
+.sellticket-container h2 {
+  font-size: 36px;
+  margin-bottom: 30px;
+  color: #00f0ff;
 
 .tickets-container h2 {
   text-align: center;
@@ -26,7 +30,6 @@
   color: #ccc;
   font-size: 18px;
 }
-
 
 /* reuse your existing grid/card styles */
 .tickets-grid {
@@ -134,7 +137,6 @@
   border-radius: 4px;
   text-decoration: none;
 }
-
 
 .nav-button:hover {
   background: rgba(255,255,255,0.2);

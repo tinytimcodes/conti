@@ -29,14 +29,13 @@ export default function SellTicket() {
         </div>
         <div className="nav-links">
           <Link to="/dashboard"    className="nav-button">Home</Link>
-          <Link to="/sellticket"   className="nav-button">Sell</Link>
-          <Link to="/myTicket"     className="nav-button">My Tickets</Link>
-          <Link to="/likedTickets" className="nav-button">Liked Tickets</Link>
+          <Link to="/tickets"     className="nav-button">My Tickets</Link>
+          <Link to="/myticket" className="nav-button">Liked Tickets</Link>
           <Link to="/"             className="nav-button">Logout</Link>
         </div>
       </nav>
 
-      <h2>Sold Tickets</h2>
+      <h2>Marketplace</h2>
       {soldTickets.length === 0 ? (
         <p className="no-tickets">No sold tickets yet.</p>
       ) : (
