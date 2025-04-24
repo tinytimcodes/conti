@@ -107,16 +107,20 @@ router.post("/:userId/likedTickets", async (req, res) => {
         const { userId } = req.params;
         const { ticketData } = req.body;
 
-        // Create new ticket
-        const newTicket = new Ticket({
-            ...ticketData,
-            purchase: {
-                user: userId,
-                purchaseDate: new Date()
-            }
-        });
+        console.log('Received ticket data:', JSON.stringify(ticketData, null, 2));
 
-        await newTicket.save();
+        if (!ticketData) {
+            return res.status(400).json({ message: "No ticket data provided" });
+        }
+
+        // First, check if a ticket with this ticketmasterId already exists
+        let ticket = await Ticket.findOne({ ticketmasterId: ticketData.ticketmasterId });
+        
+        if (!ticket) {
+            // If ticket doesn't exist, create a new one
+            ticket = new Ticket(ticketData);
+            await ticket.save();
+        }
 
         // Add ticket to user's likedTickets array
         const user = await User.findById(userId);
@@ -125,17 +129,26 @@ router.post("/:userId/likedTickets", async (req, res) => {
         }
 
         // Check if ticket is already liked
-        if (user.likedTickets.includes(newTicket._id)) {
+        if (user.likedTickets.includes(ticket._id)) {
             return res.status(400).json({ message: "Ticket already liked" });
         }
 
-        user.likedTickets.push(newTicket._id);
+        user.likedTickets.push(ticket._id);
         await user.save();
 
-        res.status(201).json(newTicket);
+        res.status(201).json(ticket);
     } catch (err) {
         console.error("Error adding liked ticket:", err);
-        res.status(500).json({ message: "Server error" });
+        if (err.name === 'ValidationError') {
+            return res.status(400).json({ 
+                message: "Invalid ticket data", 
+                errors: err.errors 
+            });
+        }
+        res.status(500).json({ 
+            message: "Server error",
+            error: err.message 
+        });
     }
 });
 
