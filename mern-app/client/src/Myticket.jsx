@@ -74,7 +74,12 @@ function Myticket() {
                   <p>Date: {ticket.event.dates?.start?.localDate}</p>
                   <p>Venue: {ticket.event._embedded?.venues?.[0]?.name}</p>
                   <p>Type: {ticket.type}</p>
-                  <p>Price: ${ticket.price.amount} {ticket.price.currency}</p>
+                  <p>
+                    Price:{' '}
+                    {ticket.price?.amount != null
+                    ? `$${ticket.price.amount} ${ticket.price.currency}`
+                    : 'Not set'}
+                  </p>
                   <div className="ticket-actions">
                     <button
                       className="remove-button"
