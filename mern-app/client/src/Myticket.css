@@ -1,5 +1,6 @@
 .myticket-container {
   padding: 40px 20px;
+  padding-top: 100px;
   background-color: #1e1e1e;
   color: white;
   min-height: 100vh;
@@ -18,7 +19,7 @@
 .tickets-container h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #ffffff;
+  color: #00f0ff;
 }
 
 .ticket-grid {
@@ -47,14 +48,7 @@
   border-radius: 12px;
   padding: 16px;
   color: #000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  /* scroll-snap-align: start;
-  flex: 0 0 260px;
-  max-width: 260px;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; */
+  box-shadow: 0 4px 12px #1cc0ad;
 }
 
 .ticket-card:hover {
@@ -145,7 +139,7 @@
   font-weight: bold;
   text-align: center;
   margin: 10px 0;
-  min-height: 60px; /* or adjust to your liking */
+  min-height: 60px;
 }
 
 .navbar, .navbar-inner {

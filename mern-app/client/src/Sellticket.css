@@ -1,3 +1,65 @@
+.dashboard-container {
+  height: 100vh;
+  width: 100%;
+  background-color: #1e1e1e;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar {
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.08);
+  padding: 12px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+img {
+  height: 60px;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.nav-links {
+  display: flex;
+  gap: 6px; 
+  align-items: center;
+  margin-right: -18px; 
+}
+
+.nav-button {
+  display: inline-block;
+  text-decoration: none;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: 0.3s;
+  font-size: 16px;
+  cursor: pointer; 
+  z-index: 10; 
+}
+
+.nav-button:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 8px #00f0ff, 0 0 16px #00f0ff, 0 0 32px #00f0ff;
+}
+
 .sellticket-container {
   min-height: 100vh;
   display: flex;
@@ -8,6 +70,8 @@
   font-family: 'Inter', sans-serif;
   text-align: center;
   padding: 20px;
+  width: 30%;
+  padding-top: 60px;
 }
 
 .sellticket-container h1 {
