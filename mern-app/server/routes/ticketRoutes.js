@@ -3,7 +3,7 @@ const Ticket = require("../models/ticket");
 const User = require("../models/User");
 const router = express.Router();
 
-// Get all tickets listed for sale
+// return all tickets listed for sale
 router.get("/marketplace", async (req, res) => {
     try {
         const tickets = await Ticket.find({
@@ -18,7 +18,7 @@ router.get("/marketplace", async (req, res) => {
     }
 });
 
-// List a ticket for sale
+// list ticket
 router.post("/:ticketId/list", async (req, res) => {
     try {
         const { ticketId } = req.params;
@@ -31,9 +31,9 @@ router.post("/:ticketId/list", async (req, res) => {
             return res.status(404).json({ message: "Ticket not found" });
         }
 
-        // Verify ticket ownership
+        // verify ticket ownership, but should we really do this.
         
-        // Update ticket for listing
+        // update ticket statuses for listing
         ticket.isListed = true;
         ticket.listingDate = new Date();
         ticket.saleStatus = 'active';

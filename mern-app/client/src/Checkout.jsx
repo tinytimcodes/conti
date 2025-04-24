@@ -24,22 +24,32 @@ function Checkout() {
     );
   }
 
-  const handleConfirm = async () => {
+  const handlePurchase = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
     try {
-      const res = await axios.put(
-        `http://localhost:5001/api/users/${user._id}/tickets/${ticket._id}`,
-        { status: 'purchased' }
-      );
-      console.log('PATCH response:', res.data);
-      alert('Purchase complete!');
-      navigate('/dashboard');
-    } catch (err) {
-      console.error('Purchase error response:', err.response || err);
-      alert(
-        `Purchase failed: ${
-          err.response?.data?.message || err.message || 'Please try again.'
-        }`
-      );
+      // add the ticket to the user's bought ticket
+      await axios.post(`http://localhost:5001/api/users/${user._id}/boughtTickets`, {
+        ticketId: ticket._id
+      });
+
+      // remove the same ticket from the liked tickets
+      await axios.delete(`http://localhost:5001/api/users/${user._id}/likedTickets/${ticket._id}`);
+
+      alert("Purchase successful! Ticket added to your collection.");
+      navigate('/tickets');
+    } catch (error) {
+      console.error("Error purchasing ticket:", error);
+      if (error.response?.status === 404) {
+        alert("Ticket not found. It may have been already purchased.");
+      } else if (error.response?.status === 400) {
+        alert("You've already purchased this ticket.");
+      } else {
+        alert("Failed to complete purchase. Please try again.");
+      }
     }
   };
 
@@ -154,7 +164,7 @@ function Checkout() {
             </div>
           )}
 
-          <button className="confirm-button" onClick={handleConfirm}>Confirm Purchase</button>
+          <button className="confirm-button" onClick={handlePurchase}>Confirm Purchase</button>
         </div>
       </div>
     </div>

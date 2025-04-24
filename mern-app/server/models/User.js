@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     
-    // more rofile Information
+    // more profile Information
     profilePicture: { type: String }, // URL to stored image
     location: { type: String }, // User's location for event recommendations
     
@@ -15,11 +15,17 @@ const userSchema = new mongoose.Schema({
     favoriteArtists: [{ type: String }], // arr of artists
     savedEvents: [{ 
         type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Event' // Reference to Event model (you'll need to create this)
+        ref: 'Event' // maybe make this into saved events
     }],
     
-    // User's tickets
-    tickets: [{
+    // User's liked tickets (from dashboard)
+    likedTickets: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Ticket'
+    }],
+    
+    // user's purchased tickets where u can buy from ur liked tickets
+    boughtTickets: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ticket'
     }],
@@ -41,29 +47,28 @@ const userSchema = new mongoose.Schema({
     
 }, { 
     timestamps: true, // automatically adds createdAt and updatedAt fields
-    toJSON: { virtuals: true }, // include virtuals when converting to JSON (ngl dont need this)
-    toObject: { virtuals: true } // include virtuals when converting to object ( this too)
+    toJSON: { virtuals: true }, // include virtuals when converting to JSON
+    toObject: { virtuals: true } // include virtuals when converting to object
 });
 
-// for better query performance? need to test this
+// indexes for better query performance
 userSchema.index({ email: 1 });
 userSchema.index({ location: 1 });
 userSchema.index({ favoriteGenres: 1 });
 userSchema.index({ favoriteArtists: 1 });
-userSchema.index({ tickets: 1 }); // Add index for tickets
+userSchema.index({ likedTickets: 1 });
+userSchema.index({ boughtTickets: 1 });
 
-// honeslty not completely sure if we need this but nice to have
+// lowercase email before saving
 userSchema.pre('save', function(next) {
-    // lowercase email before saving
     if (this.isModified('email')) {
         this.email = this.email.toLowerCase();
     }
     next();
 });
 
-// method to compare password (have to implement this with bcrypt but are we using this?)
+// method to compare password (to be implemented with bcrypt)
 userSchema.methods.comparePassword = async function(candidatePassword) {
-    // This will be implemented when we add authentication
     return true; // Placeholder
 };
 

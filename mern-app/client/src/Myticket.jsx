@@ -20,7 +20,7 @@ function Myticket() {
       }
 
       try {
-        const response = await axios.get(`http://localhost:5001/api/users/${user._id}/tickets`);
+        const response = await axios.get(`http://localhost:5001/api/users/${user._id}/likedTickets`);
         setTickets(response.data);
       } catch (error) {
         console.error("Error fetching tickets:", error);
@@ -34,7 +34,7 @@ function Myticket() {
 
   const removeTicket = async (ticketId) => {
     try {
-      await axios.delete(`http://localhost:5001/api/users/${user._id}/tickets/${ticketId}`);
+      await axios.delete(`http://localhost:5001/api/users/${user._id}/likedTickets/${ticketId}`);
       setTickets(tickets.filter(ticket => ticket._id !== ticketId));
     } catch (error) {
       console.error("Error removing ticket:", error);
@@ -51,9 +51,9 @@ function Myticket() {
       <nav className="navbar">
         <div className="logo-container">
           <img className="img" src={logo} alt="Logo" />
-            </div>
+        </div>
         <div className="nav-links">
-        <Link to="/dashboard" className="nav-button">Home</Link>
+          <Link to="/dashboard" className="nav-button">Home</Link>
           <Link to="/sellticket" className="nav-button">Sell</Link>
           <Link to="/tickets" className="nav-button">My Tickets</Link>
           <Link to="/" className="nav-button">Logout</Link>
@@ -74,32 +74,21 @@ function Myticket() {
                   <p>Date: {ticket.event.dates?.start?.localDate}</p>
                   <p>Venue: {ticket.event._embedded?.venues?.[0]?.name}</p>
                   <p>Type: {ticket.type}</p>
-                  {ticket.priceRange ? (
-                    <p>
-                      Price:&nbsp;
-                      ${ticket.priceRange.min}
-                      {ticket.priceRange.max && ticket.priceRange.max !== ticket.priceRange.min
-                        ? ` – $${ticket.priceRange.max}`
-                        : ''
-                      }&nbsp;{ticket.price.currency}
-                    </p>
-                  ) : (
-                    <p>Price: ${ticket.price.amount} {ticket.price.currency}</p>
-                  )}
+                  <p>Price: ${ticket.price.amount} {ticket.price.currency}</p>
                   <div className="ticket-actions">
-                  <button
-                    className="remove-button"
-                    onClick={() => removeTicket(ticket._id)}
-                  >
-                    Remove
-                  </button>
-                  <button
-                    className="buy-button"
-                    onClick={() => navigate('/checkout', { state: { ticket } })}
-                  >
-                    Buy It
-                  </button>
-                </div>
+                    <button
+                      className="remove-button"
+                      onClick={() => removeTicket(ticket._id)}
+                    >
+                      Remove
+                    </button>
+                    <button
+                      className="buy-button"
+                      onClick={() => navigate('/checkout', { state: { ticket } })}
+                    >
+                      Buy It
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
