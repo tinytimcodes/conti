@@ -47,7 +47,7 @@ function Dashboard() {
         date: event.dates?.start?.localDate || "TBA",
         venue: event._embedded?.venues?.[0]?.name || "Unknown Venue",
         image: event.images?.find(img => img.width >= 600)?.url || "",
-        eventData: event // Full event data
+        eventData: event
       }));
       
       const uniqueByArtist = Array.from(
@@ -63,7 +63,8 @@ function Dashboard() {
         return;
       }
       
-      setConcerts(uniqueByArtist);
+      const shuffled = uniqueByArtist.sort(() => 0.5 - Math.random());
+      setConcerts(shuffled);
       setIndex(0);
       setIsSearching(false);
       
@@ -110,6 +111,8 @@ function Dashboard() {
         }
       });
 
+      setConcerts(prev => prev.filter(c => c.id !== concert.id));
+      setIndex(0);
       if (response.data) {
         alert("Ticket added to My Tickets!");
       }
@@ -125,13 +128,14 @@ function Dashboard() {
       opacity: 0,
       transition: 'transform 0.3s ease, opacity 0.3s ease'
     });
+  
     setTimeout(() => {
       setStyle({});
-      setIndex((prev) => (prev + 1) % concerts.length); 
+      if (dir === 'right' && concert) {
+        addToMyTickets(concert);
+      }
+      setIndex(i => (i + 1) % concerts.length);
     }, 300);
-    if (dir === 'right' && concert) {
-      addToMyTickets(concert);
-    }
   };
 
   const handlePointerDown = (e) => {
@@ -172,11 +176,12 @@ function Dashboard() {
         </div>
         <div className="nav-links">
           <Link to="/sellticket" className="nav-button">Sell</Link>
-          <Link to="/myticket" className="nav-button">My Tickets</Link>
+          <Link to="/tickets" className="nav-button">My Tickets</Link>
+          <Link to="/myticket" className="nav-button">Liked Tickets</Link>
           {user ? (
             <Link to="/profile" className="nav-button">Profile</Link>
           ) : (
-            <Link to="/login" className="nav-button">Sign In/Sign Up</Link>
+            <Link to="/login" className="nav-button">Logout</Link>
           )}
         </div>
       </nav>

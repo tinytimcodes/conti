@@ -2,6 +2,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
+import axios from 'axios';
+import logo from './assets/ContinderLogo.png';
 import './Checkout.css';
 
 function Checkout() {
@@ -13,25 +15,47 @@ function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState('credit-card');
   const [showAddCard, setShowAddCard] = useState(false);
 
-  const handleConfirm = () => {
-    alert('Purchase complete!');
-    navigate('/dashboard');
-  };
+    if (!ticket) {
+    return (
+      <div className="checkout-page">
+        <p>No ticket selected. Please go back and pick one.</p>
+        <button onClick={() => navigate('/myticket')}>My Tickets</button>
+      </div>
+    );
+  }
 
-  if (!ticket) return <div className="checkout-page">No ticket selected.</div>;
+  const handleConfirm = async () => {
+    try {
+      const res = await axios.put(
+        `http://localhost:5001/api/users/${user._id}/tickets/${ticket._id}`,
+        { status: 'purchased' }
+      );
+      console.log('PATCH response:', res.data);
+      alert('Purchase complete!');
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Purchase error response:', err.response || err);
+      alert(
+        `Purchase failed: ${
+          err.response?.data?.message || err.message || 'Please try again.'
+        }`
+      );
+    }
+  };
 
   return (
     <div className="dashboard-container">
       <nav className="navbar">
-        <div className="logo">Continder</div>
+        <div className="logo-container">
+                <img className="img" src={logo} alt="Logo" />
+                </div>
         <div className="nav-links">
+          <Link to="/dashboard" className="nav-button">Home</Link>
           <Link to="/sellticket" className="nav-button">Sell</Link>
-          <Link to="/myticket" className="nav-button">My Ticket</Link>
-          {user ? (
-            <Link to="/profile" className="nav-button">Profile</Link>
-          ) : (
-            <Link to="/login" className="nav-button">Sign In/Sign Up</Link>
-          )}
+          <Link to="/tickets" className="nav-button">My Tickets</Link>
+          <Link to="/myticket" className="nav-button">Liked Tickets</Link>
+          <Link to="/profile" className="nav-button">Profile</Link>
+          <Link to="/" className="nav-button">Logout</Link>
         </div>
       </nav>
 

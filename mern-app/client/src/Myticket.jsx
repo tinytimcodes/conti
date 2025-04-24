@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useAuth } from './context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import './Myticket.css';
+import logo from './assets/ContinderLogo.png';
 
 function Myticket() {
   const [tickets, setTickets] = useState([]);
@@ -48,20 +49,20 @@ function Myticket() {
   return (
     <div className="myticket-container">
       <nav className="navbar">
-        <div className="logo">Continder</div>
+        <div className="logo-container">
+          <img className="img" src={logo} alt="Logo" />
+            </div>
         <div className="nav-links">
-          <Link to="/dashboard" className="nav-button">Home</Link>
+        <Link to="/dashboard" className="nav-button">Home</Link>
           <Link to="/sellticket" className="nav-button">Sell</Link>
-          {user ? (
-            <Link to="/profile" className="nav-button">Profile</Link>
-          ) : (
-            <Link to="/login" className="nav-button">Sign In/Sign Up</Link>
-          )}
+          <Link to="/tickets" className="nav-button">My Tickets</Link>
+          <Link to="/profile" className="nav-button">Profile</Link>
+          <Link to="/" className="nav-button">Logout</Link>
         </div>
       </nav>
 
       <div className="tickets-container">
-        <h2>My Tickets</h2>
+        <h2>Liked Tickets</h2>
         {tickets.length === 0 ? (
           <p className="no-tickets">No tickets saved yet.</p>
         ) : (
@@ -74,7 +75,18 @@ function Myticket() {
                   <p>Date: {ticket.event.dates?.start?.localDate}</p>
                   <p>Venue: {ticket.event._embedded?.venues?.[0]?.name}</p>
                   <p>Type: {ticket.type}</p>
-                  <p>Price: ${ticket.price.amount} {ticket.price.currency}</p>
+                  {ticket.priceRange ? (
+                    <p>
+                      Price:&nbsp;
+                      ${ticket.priceRange.min}
+                      {ticket.priceRange.max && ticket.priceRange.max !== ticket.priceRange.min
+                        ? ` – $${ticket.priceRange.max}`
+                        : ''
+                      }&nbsp;{ticket.price.currency}
+                    </p>
+                  ) : (
+                    <p>Price: ${ticket.price.amount} {ticket.price.currency}</p>
+                  )}
                   <div className="ticket-actions">
                   <button
                     className="remove-button"
@@ -86,7 +98,7 @@ function Myticket() {
                     className="buy-button"
                     onClick={() => navigate('/checkout', { state: { ticket } })}
                   >
-                    Buy it
+                    Buy It
                   </button>
                 </div>
                 </div>
